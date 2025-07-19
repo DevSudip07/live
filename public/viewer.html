@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Viewer - Camera Sender</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Viewer: Camera Sender</h1>
+  <p id="status">Waiting...</p>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("room");
+
+    const status = document.getElementById("status");
+
+    if (roomId) {
+      socket.emit("join-room", roomId);
+    }
+
+    socket.on("joined-room", async (success) => {
+      if (!success) {
+        status.innerText = "Invalid or expired link.";
+        return;
+      }
+
+      status.innerText = "Camera permission required...";
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        await video.play();
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 320;
+        canvas.height = 240;
+
+        status.innerText = "Streaming...";
+
+        setInterval(() => {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const image = canvas.toDataURL("image/jpeg", 0.6);
+          socket.emit("send-image", { roomId, image });
+        }, 1000);
+
+      } catch (err) {
+        status.innerText = "Camera permission denied.";
+      }
+    });
+  </script>
+</body>
+</html>
