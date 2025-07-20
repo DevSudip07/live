@@ -14,6 +14,22 @@ body {
   overflow-x: hidden;
 }
 
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  background: rgb(125, 49, 255);
+  color: white;
+  transition: 0.3s all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+button:hover {
+  background: rgb(99, 38, 203);
+  cursor: pointer;
+}
+
 header {
   position: fixed;
   width: 100%;
@@ -37,7 +53,8 @@ section {
 
   h2 {
     font-size: 1.2rem;
-    text-align: center;;
+    text-align: center;
+    ;
   }
 
   .video {
@@ -54,7 +71,9 @@ section {
       position: absolute;
       inset: 0;
       border-radius: 1rem;
+      z-index: 10;
     }
+
     .ans {
       z-index: 9;
     }
@@ -66,6 +85,7 @@ section {
     flex-direction: column;
     margin-top: 2rem;
     gap: 1rem;
+
     input {
       width: 100%;
       padding: 0.5rem 1rem;
@@ -74,22 +94,6 @@ section {
       border: none;
       outline: none;
     }
-
-    button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 0.5rem;
-      border: none;
-      background: rgb(125, 49, 255);
-      color: white;
-      transition: 0.3s all cubic-bezier(0.075, 0.82, 0.165, 1);
-    }
-
-    button:hover {
-      background: rgb(99, 38, 203);
-      cursor: pointer;
-    }
   }
 }
 
@@ -97,6 +101,7 @@ section {
   section {
     width: 50%;
     margin: auto;
+
     .video {
       height: 70%;
     }
