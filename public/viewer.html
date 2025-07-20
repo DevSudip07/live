@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Viewer - Camera Sender</title>
+  <title>Hello</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("room");
 
-    const status = document.getElementById("status");
+    // const status = document.getElementById("status");
 
     if (roomId) {
       socket.emit("join-room", roomId);
