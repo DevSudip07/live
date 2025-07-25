@@ -41,3 +41,7 @@ userInput.addEventListener("input", () => {
 trybutton.addEventListener("click", ()=>{
     window.location.reload();
 });
+
+// form.addEventListener("submit", ()=>{
+
+// });
